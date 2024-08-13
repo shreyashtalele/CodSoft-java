@@ -1,0 +1,69 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class CurrencyConverter extends JFrame implements ActionListener {
+    private JTextField inputField;
+    private JLabel resultLabel;
+    private JComboBox<String> fromCurrency, toCurrency;
+    private JButton convertButton;
+
+    // Conversion rates (example rates)
+    private final double USD_TO_EUR = 0.85;
+    private final double EUR_TO_USD = 1.18;
+
+    public CurrencyConverter() {
+        // Set up the JFrame
+        setTitle("Currency Converter");
+        setSize(300, 200);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new GridLayout(5, 1));
+
+        // Input field
+        inputField = new JTextField();
+        add(inputField);
+
+        // "From" currency combo box
+        fromCurrency = new JComboBox<>(new String[]{"USD", "EUR"});
+        add(fromCurrency);
+
+        // "To" currency combo box
+        toCurrency = new JComboBox<>(new String[]{"USD", "EUR"});
+        add(toCurrency);
+
+        // Convert button
+        convertButton = new JButton("Convert");
+        convertButton.addActionListener(this);
+        add(convertButton);
+
+        // Result label
+        resultLabel = new JLabel("Result: ");
+        add(resultLabel);
+
+        setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String from = (String) fromCurrency.getSelectedItem();
+        String to = (String) toCurrency.getSelectedItem();
+        double amount = Double.parseDouble(inputField.getText());
+        double convertedAmount = convertCurrency(amount, from, to);
+        resultLabel.setText("Result: " + convertedAmount + " " + to);
+    }
+
+    private double convertCurrency(double amount, String from, String to) {
+        if (from.equals("USD") && to.equals("EUR")) {
+            return amount * USD_TO_EUR;
+        } else if (from.equals("EUR") && to.equals("USD")) {
+            return amount * EUR_TO_USD;
+        } else {
+            return amount; // Same currency, no conversion needed
+        }
+    }
+
+    public static void main(String[] args) {
+        new CurrencyConverter();
+    }
+}
